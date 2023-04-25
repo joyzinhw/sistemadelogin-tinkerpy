@@ -66,13 +66,15 @@ def Cadastro():
         Email = Email_Entry.get()
         User = User_Entry.get()
         Pass = Pass_Entry.get()
-        
-        banco.cursor.execute("""
-        INSERT INTO Users(Name, Email, User, Password) Values(?, ?, ?, ?)
-        """,(Name, Email, User, Pass)) 
-
-        banco.conn.commit()
-        messagebox.showinfo(title="Info", message="O seu registro foi um sucesso!" )
+           
+        if (Name == "" and Email == "" and User == "" and Pass == "" or Name == "" and Email == ""):
+            messagebox.showerror(title="Error", message="Preencha todos os campos!")
+        else:
+            banco.cursor.execute("""
+            INSERT INTO Users(Name, Email, User, Password) Values(?, ?, ?, ?)
+            """,(Name, Email, User, Pass))
+            banco.conn.commit()
+            messagebox.showinfo(title="Info", message="O seu registro foi um sucesso!")
 
 
     Cad= ttk.Button(RightFrame,text="Registrar",width=18, command=Banco)
@@ -81,9 +83,7 @@ def Cadastro():
     def Voltar():
     
        Nome_Label.place(x=5000)
-
        Nome_Entry.place(x=5000)
-
        Email_Label.place(x=5000)
        Email_Entry.place(x=5000)
        Back.place(x=5000)
