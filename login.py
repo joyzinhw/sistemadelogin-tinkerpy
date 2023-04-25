@@ -3,6 +3,7 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+import banco
 
 
 janela = Tk()
@@ -40,7 +41,7 @@ Pass_Entry = Entry(RightFrame, width=18, show="*")
 Pass_Entry.place(x=110, y=120)
 
 #button
-Login_Button = ttk.Button(RightFrame,text="login",width=16)
+Login_Button = ttk.Button(RightFrame,text="login",width=18)
 Login_Button.place(x=10, y=250)
 
 #remove os butoons
@@ -59,16 +60,45 @@ def Cadastro():
     
     Email_Entry = Entry(RightFrame, width=18, justify=CENTER)
     Email_Entry.place(x=110, y=60)
-    
-    Cad= ttk.Button(RightFrame,text="Registrar",width=18)
+
+    def Banco():
+        Name = Nome_Entry.get()
+        Email = Email_Entry.get()
+        User = User_Entry.get()
+        Pass = Pass_Entry.get()
+        
+        banco.cursor.execute("""
+        INSERT INTO Users(Name, Email, User, Password) Values(?, ?, ?, ?)
+        """,(Name, Email, User, Pass)) 
+
+        banco.conn.commit()
+        messagebox.showinfo(title="Info", message="O seu registro foi um sucesso!" )
+
+
+    Cad= ttk.Button(RightFrame,text="Registrar",width=18, command=Banco)
     Cad.place(x=230, y=250)
     
-    Black = ttk.Button(RightFrame,text="Voltar",width=18)
-    Black.place(x=10, y=250)
+    def Voltar():
+    
+       Nome_Label.place(x=5000)
+
+       Nome_Entry.place(x=5000)
+
+       Email_Label.place(x=5000)
+       Email_Entry.place(x=5000)
+       Back.place(x=5000)
+       Cad.place(x=5000)
+
+       #trazer de volta os buttons
+       Login_Button.place(x=10, y=250)
+       Cad_Button.place(x=230, y=250)
+
+    Back = ttk.Button(RightFrame,text="Voltar",width=18, command=Voltar)
+    Back.place(x=10, y=250)
     
     
-Cad_Button = ttk.Button(RightFrame,text="cadastro",width=16, command=Cadastro)
-Cad_Button.place(x=245, y=250)
+Cad_Button = ttk.Button(RightFrame,text="cadastro",width=18, command=Cadastro)
+Cad_Button.place(x=230, y=250)
 
 
 janela.mainloop()
