@@ -1,11 +1,15 @@
-## import bibliotecas
+## import bibliotecas 
+
+#by: joyzinhw
+
 
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
 import banco
+################################
 
-
+#criei a janela
 janela = Tk()
 janela.title("login")
 janela.geometry("600x300")
@@ -13,11 +17,12 @@ janela.configure(background="white")
 janela.resizable(width=False, height=False)
 janela.attributes("-alpha", 0.9)
 
+################################
 
+#logo do lado esquerdo
 img_logo = PhotoImage(file="imagem/asa.png")
 
 #desing da janela e tamanho
-
 LeftFrame = Frame(janela, width=200, height=300, bg="blue", relief="raised")
 LeftFrame.pack(side=LEFT)
 
@@ -26,6 +31,7 @@ RightFrame.pack(side=RIGHT)
 
 Logo_Label = Label(LeftFrame, image=img_logo,bg="blue")
 Logo_Label.place(x=50, y=100)
+################################
 
 #inputs
 User_Label = Label(RightFrame, text="Username", font=("Arial", 14), bg="black", fg="white")
@@ -39,12 +45,32 @@ Pass_Entry.place(x=7, y=120)
 
 Pass_Entry = Entry(RightFrame, width=18, show="*")
 Pass_Entry.place(x=110, y=120)
+################################
 
-#button
-Login_Button = ttk.Button(RightFrame,text="login",width=18)
+#função verifica se o cadrastro foi feito para realizar o login
+def Log():
+    User = User_Entry.get()
+    Pass = Pass_Entry.get()
+
+    banco.cursor.execute("""
+    SELECT * FROM Users 
+    WHERE (User = ? and Password = ?)
+    """, (User, Pass))
+    print("Selecionou!")
+
+    Verificar = banco.cursor.fetchone()
+    try:
+        if (User in Verificar and Pass in Verificar):
+            messagebox.showinfo(title="INFO", message="Acesso confirmado!")
+    except:
+        messagebox.showinfo(title="INFO", message="Acesso negado!")        
+################################
+
+#button de login
+Login_Button = ttk.Button(RightFrame, text="login",width=18, command=Log)
 Login_Button.place(x=10, y=250)
 
-#remove os butoons
+#função para remove os butoons
 def Cadastro():
     Login_Button.place(x=5000)
     Cad_Button.place(x=5000)
@@ -60,7 +86,9 @@ def Cadastro():
     
     Email_Entry = Entry(RightFrame, width=18, justify=CENTER)
     Email_Entry.place(x=110, y=60)
+################################
 
+#função para cadrastrar e inserir no banco de dados
     def Banco():
         Name = Nome_Entry.get()
         Email = Email_Entry.get()
@@ -74,12 +102,15 @@ def Cadastro():
             INSERT INTO Users(Name, Email, User, Password) Values(?, ?, ?, ?)
             """,(Name, Email, User, Pass))
             banco.conn.commit()
-            messagebox.showinfo(title="Info", message="O seu registro foi um sucesso!")
+            messagebox.showinfo(title="Info", message="O seu registro foi feito com sucesso!")
 
+################################
 
     Cad= ttk.Button(RightFrame,text="Registrar",width=18, command=Banco)
     Cad.place(x=230, y=250)
     
+################################ 
+#tirar os buttons da tela 
     def Voltar():
     
        Nome_Label.place(x=5000)
